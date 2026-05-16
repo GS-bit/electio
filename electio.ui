@@ -117,7 +117,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QListWidget" name="listWidget">
+           <widget class="QListWidget" name="candidates_list">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -128,20 +128,15 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
              <enum>Qt::FocusPolicy::NoFocus</enum>
             </property>
             <property name="currentRow">
-             <number>0</number>
+             <number>-1</number>
             </property>
             <property name="sortingEnabled">
              <bool>true</bool>
             </property>
-            <item>
-             <property name="text">
-              <string>Ana</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="toolButton">
+           <widget class="QToolButton" name="new_candidate_btn">
             <property name="text">
              <string>Novo candidato</string>
             </property>
@@ -188,12 +183,12 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit"/>
+                 <widget class="QLineEdit" name="name_lineedit"/>
                 </item>
                 <item>
-                 <widget class="QToolButton" name="toolButton_2">
+                 <widget class="QToolButton" name="save_btn">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Salvar</string>
@@ -207,7 +202,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QToolButton" name="toolButton_3">
+                 <widget class="QToolButton" name="delete_btn">
                   <property name="text">
                    <string>Excluir</string>
                   </property>
@@ -238,7 +233,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_2"/>
+                 <widget class="QLineEdit" name="age_lineedit"/>
                 </item>
                 <item>
                  <widget class="QLabel" name="label_4">
@@ -248,7 +243,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox">
+                 <widget class="QComboBox" name="sex_cmbbox">
                   <item>
                    <property name="text">
                     <string>Masculino</string>
@@ -273,7 +268,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_2">
+                 <widget class="QComboBox" name="period_cmbbox">
                   <item>
                    <property name="text">
                     <string>1º</string>
@@ -348,7 +343,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox">
+                 <widget class="QCheckBox" name="indication_checkbox">
                   <property name="text">
                    <string/>
                   </property>
@@ -366,7 +361,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_4"/>
+                 <widget class="QLineEdit" name="email_lineedit"/>
                 </item>
                 <item>
                  <widget class="QLabel" name="label_13">
@@ -376,7 +371,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_5"/>
+                 <widget class="QLineEdit" name="phone_lineedit"/>
                 </item>
                </layout>
               </item>
@@ -390,7 +385,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_6"/>
+                 <widget class="QLineEdit" name="github_lineedit"/>
                 </item>
                 <item>
                  <widget class="QLabel" name="label_14">
@@ -400,7 +395,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_7"/>
+                 <widget class="QLineEdit" name="linkedin_lineedit"/>
                 </item>
                </layout>
               </item>
@@ -419,7 +414,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QPlainTextEdit" name="plainTextEdit"/>
+               <widget class="QPlainTextEdit" name="personal_desc_txtedit"/>
               </item>
               <item>
                <widget class="QLabel" name="label_16">
@@ -429,7 +424,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QPlainTextEdit" name="plainTextEdit_2"/>
+               <widget class="QPlainTextEdit" name="qualities_txtedit"/>
               </item>
               <item>
                <widget class="QLabel" name="label_17">
@@ -439,7 +434,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QPlainTextEdit" name="plainTextEdit_3"/>
+               <widget class="QPlainTextEdit" name="defects_txtedit"/>
               </item>
               <item>
                <widget class="QLabel" name="label_18">
@@ -449,7 +444,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QPlainTextEdit" name="plainTextEdit_4"/>
+               <widget class="QPlainTextEdit" name="why_work_txtedit"/>
               </item>
               <item>
                <widget class="Line" name="line_2">
@@ -468,7 +463,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_3"/>
+                 <widget class="QLineEdit" name="frontend_lineedit"/>
                 </item>
                </layout>
               </item>
@@ -482,7 +477,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_8"/>
+                 <widget class="QLineEdit" name="backend_lineedit"/>
                 </item>
                </layout>
               </item>
@@ -496,7 +491,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_9"/>
+                 <widget class="QLineEdit" name="english_lineedit"/>
                 </item>
                </layout>
               </item>
@@ -510,7 +505,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_10"/>
+                 <widget class="QLineEdit" name="proactivity_lineedit"/>
                 </item>
                </layout>
               </item>
@@ -524,7 +519,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_11"/>
+                 <widget class="QLineEdit" name="resilience_lineedit"/>
                 </item>
                </layout>
               </item>
@@ -538,7 +533,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_12"/>
+                 <widget class="QLineEdit" name="communication_lineedit"/>
                 </item>
                </layout>
               </item>
@@ -552,7 +547,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_13"/>
+                 <widget class="QLineEdit" name="group_work_lineedit"/>
                 </item>
                </layout>
               </item>
@@ -576,10 +571,10 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QListWidget" name="listWidget_2"/>
+               <widget class="QListWidget" name="schedule_list"/>
               </item>
               <item>
-               <widget class="QToolButton" name="toolButton_4">
+               <widget class="QToolButton" name="add_schedule_btn">
                 <property name="text">
                  <string>Adicionar horário</string>
                 </property>
@@ -605,7 +600,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QScrollArea" name="scrollArea">
+         <widget class="QScrollArea" name="insufficient_availabilities_label">
           <property name="widgetResizable">
            <bool>true</bool>
           </property>
@@ -634,7 +629,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
              </widget>
             </item>
             <item>
-             <layout class="QGridLayout" name="gridLayout">
+             <layout class="QGridLayout" name="schedules_grid">
               <item row="19" column="0">
                <widget class="QLabel" name="label_51">
                 <property name="text">
@@ -881,7 +876,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="greatest_availabilities_label">
               <property name="text">
                <string>Não há candidatos com carga horária registrada até o momento.</string>
               </property>
@@ -958,7 +953,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_58">
+             <widget class="QLabel" name="scores_label">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1005,17 +1000,17 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
     <property name="title">
      <string>Ajuda</string>
     </property>
-    <addaction name="actionSobre"/>
-    <addaction name="actionFechar"/>
+    <addaction name="action_about"/>
+    <addaction name="action_exit"/>
    </widget>
    <addaction name="menuAjuda"/>
   </widget>
-  <action name="actionSobre">
+  <action name="action_about">
    <property name="text">
     <string>Sobre o Electio</string>
    </property>
   </action>
-  <action name="actionFechar">
+  <action name="action_exit">
    <property name="text">
     <string>Fechar</string>
    </property>

@@ -72,7 +72,18 @@ class Database:
             1 otherwise.
         """
 
-        pass
+        try:
+            self.cursor.execute(
+                "INSERT INTO candidates (name) VALUES (?);", (name,)
+            )
+            self.connection.commit()
+
+            return 0
+
+        except:
+            self.connection.rollback()
+
+            return 1
 
     def read_candidate(self, _id: int) -> dict:
         """
@@ -89,7 +100,114 @@ class Database:
             but None if an error occuried.
         """
 
-        pass
+        try:
+            self.cursor.execute(
+                "SELECT * FROM candidates WHERE id = ?;", (_id,)
+            )
+
+            candidate_row = self.cursor.fetchone()
+
+            if not candidate_row:
+                return None
+
+            self.cursor.execute(
+                "SELECT time_slot FROM schedules WHERE candidate_id = ?;", (_id,)
+            )
+
+            schedule_rows = self.cursor.fetchall()
+
+            candidate_dict = {
+                "name": candidate_row[1],
+                "age": candidate_row[2],
+                "sex": candidate_row[3],
+                "current_period": candidate_row[4],
+                "indication": bool(candidate_row[5]),
+                "email": candidate_row[6],
+                "phone": candidate_row[7],
+                "github": candidate_row[8],
+                "linkedin": candidate_row[9],
+                "personal_description": candidate_row[10],
+                "qualities": candidate_row[11],
+                "defects": candidate_row[12],
+                "why_wants_to_work": candidate_row[13],
+                "front_end_score": candidate_row[14],
+                "back_end_score": candidate_row[15],
+                "english_score": candidate_row[16],
+                "proactivity_score": candidate_row[17],
+                "resilience_score": candidate_row[18],
+                "communicative_skills_score": candidate_row[19],
+                "group_work_score": candidate_row[20],
+                "schedules": [s[0] for s in schedule_rows] if schedule_rows else []
+            }
+
+            return candidate_dict
+
+        except:
+            return None
+
+    def fetch_candidates(self) -> list:
+        """
+        It fetches a list of all candidates.
+
+        Returns:
+            a list of dictionaries, representing candidates, containing the keys "name", "age", "sex", "current_period", "indication", "email", "phone", "github",
+            "linkedin", "personal_description", "qualities", "defects", "why_wants_to_work", "front_end_score",
+            "back_end_score", "english_score", "proactivity_score", "resilience_score", "communicative_skills_score",
+            "group_work_score" and "schedules",
+            but None if an error occuried.
+        """
+
+        try:
+            self.cursor.execute("SELECT * FROM candidates ORDER BY name ASC;")
+
+            rows = self.cursor.fetchall()
+
+            candidates_list = []
+
+            for candidate_row in rows:
+                candidate_id = candidate_row[0]
+
+                self.cursor.execute(
+                    "SELECT time_slot FROM schedules WHERE candidate_id = ?;", (candidate_id,)
+                )
+
+                schedule_rows = self.cursor.fetchall()
+
+                candidate_dict = {
+                    "id": candidate_row[0],
+                    "name": candidate_row[1],
+                    "age": candidate_row[2],
+                    "sex": candidate_row[3],
+                    "current_period": candidate_row[4],
+                    "indication": bool(candidate_row[5]),
+                    "email": candidate_row[6],
+                    "phone": candidate_row[7],
+                    "github": candidate_row[8],
+                    "linkedin": candidate_row[9],
+                    "personal_description": candidate_row[10],
+                    "qualities": candidate_row[11],
+                    "defects": candidate_row[12],
+                    "why_wants_to_work": candidate_row[13],
+                    "front_end_score": candidate_row[14],
+                    "back_end_score": candidate_row[15],
+                    "english_score": candidate_row[16],
+                    "proactivity_score": candidate_row[17],
+                    "resilience_score": candidate_row[18],
+                    "communicative_skills_score": candidate_row[19],
+                    "group_work_score": candidate_row[20],
+                    "schedules": [s[0] for s in schedule_rows] if schedule_rows else []
+                }
+
+                candidates_list.append(candidate_dict)
+
+            return candidates_list
+
+        except:
+            return None
+
+
+
+
 
     def update_candidate(self, _id: int, name: str, age: int, sex: str, current_period: int, indication: bool,
                          email: str, phone: str, github: str, linkedin: str, personal_description: str,
@@ -129,7 +247,30 @@ class Database:
             1 otherwise.
         """
 
-        pass
+        try:
+            self.cursor.execute(
+                """
+                UPDATE candidates SET
+                    name = ?, age = ?, sex = ?, current_period = ?, indication = ?,
+                    email = ?, phone = ?, github = ?, linkedin = ?, personal_description = ?,
+                    qualities = ?, defects = ?, why_wants_to_work = ?, front_end_score = ?,
+                    back_end_score = ?, english_score = ?, proactivity_score = ?,
+                    resilience_score = ?, communicative_skills_score = ?, group_work_score = ?
+                WHERE id = ?;
+            """, (name, age, sex, current_period, indication, email, phone, github, linkedin,
+                  personal_description, qualities, defects, why_wants_to_work, front_end_score,
+                  back_end_score, english_score, proactivity_score, resilience_score,
+                  communicative_skills_score, group_work_score, _id)
+            )
+
+            self.connection.commit()
+
+            return 0
+
+        except:
+            self.connection.rollback()
+
+            return 1
 
     def delete_candidate(self, _id: int) -> int:
         """
@@ -143,7 +284,17 @@ class Database:
             1 otherwise.
         """
 
-        pass
+        try:
+            self.cursor.execute("DELETE FROM candidates WHERE id = ?;", (_id,))
+
+            self.connection.commit()
+
+            return 0
+
+        except:
+            self.connection.rollback()
+
+            return 1
 
 
 
@@ -160,7 +311,20 @@ class Database:
             1 otherwise.
         """
 
-        pass
+        try:
+            self.cursor.execute(
+                "INSERT INTO schedules (candidate_id, time_slot) VALUES (?, ?);",
+                (_id, time_slot)
+            )
+
+            self.connection.commit()
+
+            return 0
+
+        except:
+            self.connection.rollback()
+
+            return 1
 
     def read_schedule(self, candidate_id: int, schedule_id: int) -> str:
         """
@@ -174,22 +338,47 @@ class Database:
             a string in the format hh:mm-hh:mm, but None if an error occurried.
         """
 
-        pass
+        try:
+            self.cursor.execute(
+                "SELECT time_slot FROM schedules WHERE id = ? AND candidate_id = ?;",
+                (schedule_id, candidate_id)
+            )
 
-    def update_schedule(self, candidate_id: int, schedule_id: int) -> int:
+            row = self.cursor.fetchone()
+
+            return row[0] if row else None
+
+        except:
+            return None
+
+    def update_schedule(self, candidate_id: int, schedule_id: int, new_time_slot: str) -> int:
         """
         It edits the information about a schedule.
 
         Arguments:
             candidate_id: the candidate's id associated to the schedule,
-            schedule_id: the schedule's own id
+            schedule_id: the schedule's own id,
+            new_time_slot: the new time slot
 
         Returns:
             0 if the update was successful,
             1 otherwise.
         """
 
-        pass
+        try:
+            self.cursor.execute(
+                "UPDATE schedules SET time_slot = ? WHERE id = ? AND candidate_id = ?;",
+                (new_time_slot, schedule_id, candidate_id)
+            )
+
+            self.connection.commit()
+
+            return 0
+
+        except:
+            self.connection.rollback()
+
+            return 1
 
     def delete_schedule(self, candidate_id: int, schedule_id: int) -> int:
         """
@@ -204,7 +393,20 @@ class Database:
             1 otherwise.
         """
 
-        pass
+        try:
+            self.cursor.execute(
+                "DELETE FROM schedules WHERE id = ? AND candidate_id = ?;",
+                (schedule_id, candidate_id)
+            )
+
+            self.connection.commit()
+
+            return 0
+
+        except:
+            self.connection.rollback()
+
+            return 1
 
     def close_connection(self) -> None:
         """
