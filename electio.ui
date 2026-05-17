@@ -96,7 +96,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tab_widget">
       <property name="focusPolicy">
        <enum>Qt::FocusPolicy::NoFocus</enum>
       </property>
@@ -161,7 +161,7 @@ QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>0</y>
+               <y>-755</y>
                <width>776</width>
                <height>1241</height>
               </rect>

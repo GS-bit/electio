@@ -3,7 +3,7 @@ In Electio, the time, from the beginning of Sunday until the end of Saturday, is
 called universe, in the format (d, h, m), in which d is the day, going from 0 (Sunday) to 6 (Saturday), h is the hour, going from 0 to 23, always an int, and m are the minutes, going from 0 to 59, always an int too.
 """
 
-def get_schedules(database: Database) -> dict:
+def get_schedules(db: Database) -> dict:
     """
     It returns the current general status of schedules, considering the candidates' schedules.
 
@@ -17,7 +17,7 @@ def get_schedules(database: Database) -> dict:
 
     pass
 
-def get_candidates_by_availability(database: Database) -> list:
+def get_candidates_by_availability(db: Database) -> list:
     """
     It returns a list of the candidates considering the availability.
 
@@ -34,7 +34,7 @@ def get_candidates_by_availability(database: Database) -> list:
 
     pass
 
-def get_candidates_by_insufficient_availability(database: Database) -> list:
+def get_candidates_by_insufficient_availability(db: Database) -> list:
     """
     It returns a list of the candidates with insufficient availability.
 
