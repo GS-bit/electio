@@ -204,10 +204,29 @@ class Database:
 
         except:
             return None
+        
+    def fetch_schedules(self, candidate_id: int) -> list:
+        """
+        It fetches a list of schedules of a candidate.
 
+        Arguments:
+            candidate_id: the candidate's id associated to the schedules
 
+        Returns:
+            a list of strings in the format hh:mm-hh:mm, but None if an error occurried.
+        """
 
+        try:
+            self.cursor.execute(
+                "SELECT time_slot FROM schedules WHERE candidate_id = ?;", (candidate_id,)
+            )
 
+            schedule_rows = self.cursor.fetchall()
+
+            return [s[0] for s in schedule_rows] if schedule_rows else []
+
+        except:
+            return None
 
     def update_candidate(self, _id: int, name: str, age: int, sex: str, current_period: int, indication: bool,
                          email: str, phone: str, github: str, linkedin: str, personal_description: str,

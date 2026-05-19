@@ -1,9 +1,10 @@
 from PyQt6.QtWidgets import (
-    QDialog, QFormLayout, QInputDialog, QLineEdit, QListWidgetItem, QMainWindow, QMessageBox, QPushButton
+    QComboBox, QDialog, QFormLayout, QInputDialog, QLineEdit, QListWidgetItem, QMainWindow, QMessageBox, QPushButton
 )
 from PyQt6 import uic, QtCore
 
 from database import Database
+from schedules import format_intervals_by_day
 from scores import get_candidates_by_score
 
 class MainWindow(QMainWindow):
@@ -69,16 +70,32 @@ class MainWindow(QMainWindow):
         It refreshes the UI list of schedules.
         """
 
-        self.schedules_list.clear()
-        """
-        candidates = self.db.fetch_candidates()
+        self.schedule_list.clear()
+        
+        # 2. Find out which candidate is currently highlighted
+        selected_items = self.candidates_list.selectedItems()
+        if not selected_items:
+            return
 
-        if candidates is not None:
-            for candidate in candidates:
-                item = QListWidgetItem(candidate["name"])
-                item.setData(QtCore.Qt.ItemDataRole.UserRole, candidate["id"])
-                self.schedules_list.addItem(item)
-        """
+        # 3. Pull their unique database ID out of the item data
+        candidate_id = selected_items[0].data(QtCore.Qt.ItemDataRole.UserRole)
+
+        # 4. Fetch the specific schedules using your backend method
+        # (Assuming fetch_schedules takes a candidate_id, or fetches a list of dicts with 'time'/'schedule' keys)
+        schedules = self.db.fetch_schedules(candidate_id)
+
+        # 5. Populate the GUI list safely
+        if schedules is not None:
+            for schedule in schedules:
+                # Adjust key name if your DB uses something else, like schedule["time"]
+                item_text = schedule["schedule"] if isinstance(schedule, dict) else str(schedule)
+                item = QListWidgetItem(item_text)
+                
+                # Hidden trick: save the schedule's row ID if you want to delete it later!
+                if isinstance(schedule, dict) and "id" in schedule:
+                    item.setData(QtCore.Qt.ItemDataRole.UserRole, schedule["id"])
+                    
+                self.schedule_list.addItem(item)
 
     def handle_new_candidate(self) -> None:
         """
@@ -126,6 +143,8 @@ class MainWindow(QMainWindow):
             self.resilience_lineedit.setText(str(candidate["resilience_score"] or ""))
             self.communication_lineedit.setText(str(candidate["communicative_skills_score"] or ""))
             self.group_work_lineedit.setText(str(candidate["group_work_score"] or ""))
+
+        self.refresh_schedules_list()
 
     def handle_update_candidate(self) -> None:
         """
@@ -206,6 +225,9 @@ class MainWindow(QMainWindow):
         dialog = QDialog()
         dialog.setWindowTitle("Adicionar horário")
 
+        day = QComboBox()
+        day.addItems(["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"])
+
         hour_start = QLineEdit()
         hour_start.setInputMask("99:99")
         hour_end = QLineEdit()
@@ -221,21 +243,21 @@ class MainWindow(QMainWindow):
         _id = selected_candidate[0].data(QtCore.Qt.ItemDataRole.UserRole)
 
         confirm_btn.clicked.connect(lambda: [
-                self.db.create_schedule(_id, f"{hour_start.text()}-{hour_end.text()}"),
-                dialog.accept()
+                self.db.create_schedule(_id, f"{day.currentText()} {hour_start.text()}-{hour_end.text()}"),
+                dialog.accept(),
+                self.refresh_schedules_list()
             ]
         )
 
         layout = QFormLayout()
+        layout.addRow("Dia da semana:", day)
         layout.addRow("Horário inicial:", hour_start)
         layout.addRow("Horário final:", hour_end)
         layout.addWidget(confirm_btn)
 
         dialog.setLayout(layout)
 
-        dialog.show()
-
-        #self.refresh_schedules_list()
+        dialog.exec()
 
     def handle_schedule_selection(self) -> None:
         """
@@ -329,7 +351,7 @@ class MainWindow(QMainWindow):
         if self.candidates_list.count() > 0:
             self.candidates_list.setCurrentRow(0)
 
-        self.refresh_candidates_list()
+        self.refresh_schedules_list()
 
 
     def handle_tab_changed(self, index: int) -> None:
@@ -345,6 +367,20 @@ class MainWindow(QMainWindow):
             scores += f"<p><span style='font-size: 16px'><b>{candidate[0]["name"]}: </b><br />{candidate[1]}<br /><br /></span><span style='font-size: 16px; color: #8A2BE2'>[front-end: {candidate[0]["front_end_score"]}]&nbsp;&nbsp;&nbsp; [back-end: {candidate[0]["back_end_score"]}]&nbsp;&nbsp;&nbsp; [inglês: {candidate[0]["english_score"]}]&nbsp;&nbsp;&nbsp; [proatividade: {candidate[0]["proactivity_score"]}]<br />[resiliência: {candidate[0]["resilience_score"]}]&nbsp;&nbsp;&nbsp; [comunicação: {candidate[0]["communicative_skills_score"]}]&nbsp;&nbsp;&nbsp; [trabalho em equipe: {candidate[0]["group_work_score"]}]</span><br /><br /></p>"
 
         self.scores_label.setText(scores)
+
+        schedules = f"""
+        <p><b>Domingo:</b><br />{format_intervals_by_day(self.db, "Domingo")}</p>
+        <p><b>Segunda-feira:</b><br />{format_intervals_by_day(self.db, "Segunda-feira")}</p>
+        <p><b>Terça-feira:</b><br />{format_intervals_by_day(self.db, "Terça-feira")}</p>
+        <p><b>Quarta-feira:</b><br />{format_intervals_by_day(self.db, "Quarta-feira")}</p>
+        <p><b>Quinta-feira:</b><br />{format_intervals_by_day(self.db, "Quinta-feira")}</p>
+        <p><b>Sexta-feira:</b><br />{format_intervals_by_day(self.db, "Sexta-feira")}</p>
+        <p><b>Sábado:</b><br />{format_intervals_by_day(self.db, "Sábado")}</p>
+        """
+
+        print(schedules)
+
+        self.available_schedules_label.setText(schedules)
 
     def show_about_dialog(self) -> None:
         """
