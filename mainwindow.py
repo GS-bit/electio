@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 from PyQt6 import uic, QtCore
 
 from database import Database
-from schedules import format_intervals_by_day
+from schedules import format_intervals_by_day, get_candidates_by_availability, get_candidates_by_insufficient_availability
 from scores import get_candidates_by_score
 
 class MainWindow(QMainWindow):
@@ -378,9 +378,19 @@ class MainWindow(QMainWindow):
         <p><b>Sábado:</b><br />{format_intervals_by_day(self.db, "Sábado")}</p>
         """
 
-        print(schedules)
-
         self.available_schedules_label.setText(schedules)
+
+        greatest = f"""
+        {str([c[0]["name"] for c in get_candidates_by_availability(self.db)])}: {str([c[1] for c in get_candidates_by_availability(self.db)])}
+        """
+
+        self.greatest_availabilities_label.setText(greatest)
+
+        insufficient = f"""
+        {str([c["name"] for c in get_candidates_by_insufficient_availability(self.db)])}
+        """
+
+        self.insufficient_availabilities_label.setText(insufficient)
 
     def show_about_dialog(self) -> None:
         """

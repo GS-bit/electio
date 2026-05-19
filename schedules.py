@@ -34,20 +34,45 @@ def get_schedules(db: Database) -> dict:
 
 def get_candidates_by_availability(db: Database) -> list:
     """
-    It returns a list of the candidates considering the availability.
+    It returns a list of tuples of the candidates along with their availabilities.
 
     Arguments:
         database: the database
 
     Returns:
-        a list in which the first element is the candidate with the greatest availability, the second element is the
+        a list in which the first element is the candidate with the greatest availability and its value (tuple), the second element is the
         candidate with the second greatest availability and so on. The candidates are in the dictionary format, containing the keys "name", "age", "sex", "current_period", "indication", "email", "phone", "github",
         "linkedin", "personal_description", "qualities", "defects", "why_wants_to_work", "front_end_score",
         "back_end_score", "english_score", "proactivity_score", "resilience_score", "communicative_skills_score",
         "group_work_score" and "schedules".
     """
 
-    pass
+    candidates = db.fetch_candidates()
+
+    candidates_with_availability = []
+
+    for candidate in candidates:
+        schedules = candidate["schedules"]
+
+        availability = 0
+
+        for schedule in schedules:
+            time_range = schedule.split()[1]
+            time1 = time_range.split("-")[0]
+            time2 = time_range.split("-")[1]
+    
+            h_initial = time1.split(":")[0]
+            m_initial = time1.split(":")[1]
+            h_final = time2.split(":")[0]
+            m_final = time2.split(":")[1]
+
+            availability += (int(h_final) * 60 + int(m_final)) - (int(h_initial) * 60 + int(m_initial))
+
+        candidates_with_availability.append((candidate, availability))
+
+    candidates_with_availability.sort(key=lambda x: x[1], reverse=True)
+
+    return candidates_with_availability
 
 def get_candidates_by_insufficient_availability(db: Database) -> list:
     """
@@ -63,7 +88,35 @@ def get_candidates_by_insufficient_availability(db: Database) -> list:
         "group_work_score" and "schedules".
     """
 
-    pass
+    candidates = db.fetch_candidates()
+
+    insufficient_candidates = []
+
+    for candidate in candidates:
+        schedules = candidate["schedules"]
+
+        availability = {"Domingo": 0, "Segunda-feira": 0, "Terça-feira": 0, "Quarta-feira": 0, "Quinta-feira": 0, "Sexta-feira": 0, "Sábado": 0}
+
+        for schedule in schedules:
+            day = schedule.split()[0]
+
+            time_range = schedule.split()[1]
+            time1 = time_range.split("-")[0]
+            time2 = time_range.split("-")[1]
+    
+            h_initial = time1.split(":")[0]
+            m_initial = time1.split(":")[1]
+            h_final = time2.split(":")[0]
+            m_final = time2.split(":")[1]
+
+            availability[day] += (int(h_final) * 60 + int(m_final)) - (int(h_initial) * 60 + int(m_initial))
+
+        for key, value in availability.items():
+            if value < 2 and key != "Sábado" and key != "Domingo":
+                insufficient_candidates.append(candidate)
+                break
+
+    return insufficient_candidates
 
 def str_schedule_to_list(schedule_str: str) -> list:
     """
