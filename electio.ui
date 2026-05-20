@@ -82,13 +82,48 @@ QListWidget::item:selected:active {
     color: #FFFFFF;
 }
 
-QLineEdit, QPlainTextEdit, QCheckBox, QComboBox {
+QLineEdit, QPlainTextEdit, QComboBox {
+	color: #8A2BE2;
+	background-color: #F8F8F8;
+	font-size: 16px;
+	border-color: #8A2BE2;
+}
+
+QCheckBox {
 	color: #8A2BE2;
 	font-size: 16px;
 }
 
 QLineEdit#name_lineedit{
 	font-size: 24px;
+}
+
+ QScrollBar:vertical {
+	background-color: #FFFFFF;
+ 	width: 16px;
+  	border: 1px solid #D3D3D3;
+	margin: 0px 0px 0px 0px;
+  }
+
+QScrollBar::handle:vertical {
+	background-color: #8A2BE2;
+	border-radius: 4px;
+	margin: 2px;
+}
+
+QScrollBar::handle:vertical:hover {
+	background-color: #6A1B9A;
+ }
+
+QScrollBar::sub-line:vertical, QScrollBar::add-line:vertical {
+    background: none;
+    border: none;
+    height: 0px;
+    width: 0px;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -166,8 +201,8 @@ QLineEdit#name_lineedit{
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>776</width>
-               <height>1355</height>
+               <width>781</width>
+               <height>1269</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -190,7 +225,7 @@ QLineEdit#name_lineedit{
                  <widget class="QLineEdit" name="name_lineedit"/>
                 </item>
                 <item>
-                 <widget class="QToolButton" name="save_btn">
+                 <widget class="QToolButton" name="save_candidate_btn">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
@@ -206,7 +241,7 @@ QLineEdit#name_lineedit{
                  </widget>
                 </item>
                 <item>
-                 <widget class="QToolButton" name="delete_btn">
+                 <widget class="QToolButton" name="delete_candidate_btn">
                   <property name="text">
                    <string>Excluir</string>
                   </property>
@@ -588,17 +623,74 @@ QLineEdit#name_lineedit{
                </widget>
               </item>
               <item>
-               <widget class="QToolButton" name="add_schedule_btn">
-                <property name="text">
-                 <string>Adicionar horário</string>
-                </property>
-                <property name="icon">
-                 <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
-                </property>
-                <property name="toolButtonStyle">
-                 <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
-                </property>
-               </widget>
+               <layout class="QHBoxLayout" name="horizontalLayout_18">
+                <item>
+                 <widget class="QToolButton" name="add_schedule_btn">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LayoutDirection::LeftToRight</enum>
+                  </property>
+                  <property name="autoFillBackground">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Adicionar horário</string>
+                  </property>
+                  <property name="icon">
+                   <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
+                  </property>
+                  <property name="toolButtonStyle">
+                   <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="edit_schedule_btn">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Editar horário</string>
+                  </property>
+                  <property name="icon">
+                   <iconset theme="QIcon::ThemeIcon::DocumentRevert"/>
+                  </property>
+                  <property name="toolButtonStyle">
+                   <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="delete_schedule_btn">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="autoFillBackground">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Excluir horário</string>
+                  </property>
+                  <property name="icon">
+                   <iconset theme="QIcon::ThemeIcon::EditDelete"/>
+                  </property>
+                  <property name="toolButtonStyle">
+                   <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>
@@ -682,7 +774,7 @@ QLineEdit#name_lineedit{
                </font>
               </property>
               <property name="text">
-               <string>Candidatos com maior disponibilidade:</string>
+               <string>Candidatos com maiores disponibilidades:</string>
               </property>
              </widget>
             </item>

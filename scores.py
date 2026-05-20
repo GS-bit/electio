@@ -34,6 +34,6 @@ def get_candidates_by_score(db: Database) -> list:
     result = []
 
     for i in sorted_averages:
-        result.append((candidates[i], averages[i]))
+        result.append((candidates[i], round(averages[i], 2)))
 
     return result
